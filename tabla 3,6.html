@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Ventas Interactiva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        td input[type="number"] {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        td input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        td {
+            background-color: #ffffff;
+        }
+        .total-row td {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+        #formularioVentas {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Tabla de Ventas Interactiva</h2>
+    <form id="formularioVentas">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Ganancias</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cerveza</td>
+                    <td><input type="number" name="cerveza" id="cerveza" min="0" value="0" required></td>
+                    <td>$28.00</td>
+                    <td id="gananciaCerveza">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Cuba</td>
+                    <td><input type="number" name="cuba" id="cuba" min="0" value="0" required></td>
+                    <td>$45.00</td>
+                    <td id="gananciaCuba">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Caguama</td>
+                    <td><input type="number" name="caguama" id="caguama" min="0" value="0" required></td>
+                    <td>$70.00</td>
+                    <td id="gananciaCaguama">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Refresco</td>
+                    <td><input type="number" name="refresco" id="refresco" min="0" value="0" required></td>
+                    <td>$25.00</td>
+                    <td id="gananciaRefresco">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Cigarro Marlboro</td>
+                    <td><input type="number" name="marlboro" id="marlboro" min="0" value="0" required></td>
+                    <td>$7.00</td>
+                    <td id="gananciaMarlboro">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Cigarro Faros</td>
+                    <td><input type="number" name="capsula" id="capsula" min="0" value="0" required></td>
+                    <td>$6.00</td>
+                    <td id="gananciaCapsula">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Sopa</td>
+                    <td><input type="number" name="sopa" id="sopa" min="0" value="0" required></td>
+                    <td>$28.00</td>
+                    <td id="gananciaSopa">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Botana</td>
+                    <td><input type="number" name="botana" id="botana" min="0" value="0" required></td>
+                    <td>$25.00</td>
+                    <td id="gananciaBotana">$0.00</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3">Total Ganancias</td>
+                    <td id="totalGanancias">$0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <script>
+        function cargarDatos() {
+            var productos = [
+                "cerveza",
+                "cuba",
+                "caguama",
+                "refresco",
+                "marlboro",
+                "capsula",
+                "sopa",
+                "botana"
+            ];
+
+            productos.forEach(function(producto) {
+                var cantidad = parseInt(localStorage.getItem(producto)) || 0;
+                document.getElementById(producto).value = cantidad;
+            });
+        }
+
+        function guardarDatos() {
+            var productos = [
+                "cerveza",
+                "cuba",
+                "caguama",
+                "refresco",
+                "marlboro",
+                "capsula",
+                "sopa",
+                "botana"
+            ];
+
+            productos.forEach(function(producto) {
+                var cantidad = document.getElementById(producto).value;
+                localStorage.setItem(producto, cantidad);
+            });
+        }
+
+        function calcularGanancias() {
+            var productos = [
+                { id: "cerveza", precio: 28 },
+                { id: "cuba", precio: 45 },
+                { id: "caguama", precio: 70 },
+                { id: "refresco", precio: 25 },
+                { id: "marlboro", precio: 7 },
+                { id: "capsula", precio: 6 },
+                { id: "sopa", precio: 28 },
+                { id: "botana", precio: 25 }
+            ];
+
+            var totalGanancias = 0;
+
+            productos.forEach(function(producto) {
+                var cantidad = parseInt(document.getElementById(producto.id).value) || 0;
+                var ganancia = cantidad * producto.precio;
+                document.getElementById("ganancia" + capitalize(producto.id)).textContent = "$" + ganancia.toFixed(2);
+                totalGanancias += ganancia;
+            });
+
+            document.getElementById("totalGanancias").textContent = "$" + totalGanancias.toFixed(2);
+            guardarDatos();
+        }
+
+        function capitalize(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', calcularGanancias);
+        });
+
+        window.addEventListener('load', function() {
+            cargarDatos();
+            calcularGanancias();
+        });
+
+        calcularGanancias(); // Initial calculation
+    </script>
+</body>
+</html>
